@@ -28,7 +28,7 @@
               >
               </b-input>
             </b-field>
-            <div class="forget">忘记密码</div>
+            <div class="forget"><a href="#">忘记密码</a></div>
             <div class="signin-btn">
               <b-button type="is-danger is-light" style="width: 100%"
                 >登录</b-button
