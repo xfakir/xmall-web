@@ -11,8 +11,11 @@
     "lint": "npm run lint:js"
   },
   "dependencies": {
+    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/proxy": "^2.0.1",
     "core-js": "^3.6.5",
+    "nanoid": "^2.1.11",
     "nuxt": "^2.14.5",
     "nuxt-buefy": "^0.4.3"
   },
@@ -26,5 +29,11 @@
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^2.1.1"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "8081"
+    }
   }
 }

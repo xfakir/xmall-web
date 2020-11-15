@@ -106,6 +106,7 @@
 import SignNavbar from '../components/SignNavbar'
 export default {
   name: 'Signup',
+  auth: false,
   layout: 'portal',
   components: { SignNavbar },
   data() {

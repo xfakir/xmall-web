@@ -11,7 +11,8 @@
           <div class="account-box">
             <b-field class="field-box">
               <b-input
-                placeholder="Default"
+                v-model="signInInfo.username"
+                placeholder="用户名/手机号/邮箱"
                 icon="account"
                 icon-right="close-circle"
                 icon-right-clickable
@@ -21,8 +22,9 @@
             </b-field>
             <b-field class="field-box">
               <b-input
+                v-model="signInInfo.password"
                 type="password"
-                placeholder="Default"
+                placeholder="密码"
                 icon="lock-question"
                 password-reveal
               >
@@ -30,7 +32,10 @@
             </b-field>
             <div class="forget"><a href="#">忘记密码</a></div>
             <div class="signin-btn">
-              <b-button type="is-danger is-light" style="width: 100%"
+              <b-button
+                type="is-danger is-light"
+                style="width: 100%"
+                @click="signIn"
                 >登录</b-button
               >
             </div>
@@ -66,11 +71,33 @@ import SignNavbar from '../components/SignNavbar'
 import SignFooter from '../components/SignFooter'
 export default {
   name: 'Signin',
+  auth: false,
   layout: 'portal',
   components: { SignFooter, SignNavbar },
+  data() {
+    return {
+      signInInfo: {
+        username: '',
+        password: '',
+      },
+    }
+  },
+  created() {
+    if (this.$auth.loggedIn) {
+      this.$router.push('/')
+    }
+  },
   methods: {
     clearIconClick() {
-      this.email = ''
+      this.username = ''
+    },
+    signIn() {
+      this.$auth.loginWith('local', {
+        data: {
+          username: 'smm',
+          password: '123',
+        },
+      })
     },
   },
 }

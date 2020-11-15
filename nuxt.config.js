@@ -21,7 +21,7 @@ export default {
   css: ['~/css/global.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['@/plugins/interceptor'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -38,11 +38,54 @@ export default {
     'nuxt-buefy',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    proxy: true, // 表示开启代理
+    prefix: '/api', // 表示给请求url加个前缀 /api
+  },
 
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8080', // 目标接口域名
+      changeOrigin: true, // 表示是否跨域
+      pathRewrite: {
+        '^/api': '/', // 把 /api 替换成 /
+      },
+    },
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/test/login',
+            method: 'post',
+            propertyName: 'data.token',
+          },
+          logout: { url: '/api/logout', method: 'get' },
+        },
+        autoFetchUser: false,
+      },
+    },
+    redirect: {
+      login: '/login',
+      logout: '/logback',
+      callback: '/callback',
+      home: '/home',
+    },
+    cookie: {
+      options: {
+        maxAge: 60 * 60 * 24 * 7,
+      },
+    },
+    localStorage: false,
+  },
+  router: {
+    middleware: ['auth'],
+  },
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 }
