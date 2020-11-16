@@ -91,13 +91,11 @@ export default {
     clearIconClick() {
       this.username = ''
     },
-    signIn() {
-      this.$auth.loginWith('local', {
-        data: {
-          username: 'smm',
-          password: '123',
-        },
+    async signIn() {
+      await this.$auth.loginWith('local', {
+        data: this.signInInfo,
       })
+      await this.$router.push('/')
     },
   },
 }

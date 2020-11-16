@@ -1,6 +1,10 @@
 <template>
   <section class="section">
     <div class="columns is-mobile">
+      <card v-if="this.$auth.loggedIn" title="Free" icon="github">
+        {{ this.$auth.user.username }}
+      </card>
+      <card v-else title="Free" icon="github"> 登录 </card>
       <card title="Free" icon="github">
         {{ str }}
       </card>

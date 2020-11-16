@@ -66,8 +66,12 @@ export default {
             propertyName: 'data.token',
           },
           logout: { url: '/api/logout', method: 'get' },
+          user: {
+            url: '/test/user',
+            method: 'post',
+            propertyName: 'data',
+          },
         },
-        autoFetchUser: false,
       },
     },
     redirect: {
