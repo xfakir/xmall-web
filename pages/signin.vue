@@ -56,7 +56,7 @@
                 icon="arrow-right-drop-circle-outline"
                 size="is-small"
               ></b-icon
-              ><a href="#">立即注册</a>
+              ><nuxt-link to="/signup">立即注册</nuxt-link>
             </li>
           </ul>
         </div>
