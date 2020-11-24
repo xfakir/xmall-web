@@ -7,22 +7,39 @@
           <b-step-item step="1" label="验证手机号">
             <template>
               <div class="step1-box">
-                <b-field class="input-phone">
+                <b-field
+                  class="input-phone"
+                  :message="{ 'correct phone number': telephoneError }"
+                >
                   <p class="control">
                     <span class="button is-static">中国 0086</span>
                   </p>
-                  <b-input v-model="phone" style="width: 100%"></b-input>
+                  <b-input
+                    v-model="phone"
+                    style="width: 100%"
+                    @blur="finishInputPhone"
+                  ></b-input>
                 </b-field>
-                <div>
+                <!-- <div>
                   <div class="phone-validation">
                     <b-icon icon="alert-circle-outline"></b-icon>
                   </div>
                   <div class="phone-validation-text">aaa</div>
+                </div>-->
+                <div v-if="!isVerify">
+                  <b-button class="input-verify" @click="showVerify"
+                    >点击按钮进行验证</b-button
+                  >
                 </div>
-
-                <b-button class="input-verify" @click="showVerify"
-                  >点击按钮进行验证</b-button
-                >
+                <b-field v-else class="input-code">
+                  <p class="control">
+                    <span class="button is-static">手机验证码</span>
+                  </p>
+                  <b-input v-model="phone" style="width: 100%"></b-input>
+                  <p class="control">
+                    <span class="button is-static">获取验证码</span>
+                  </p>
+                </b-field>
                 <div>
                   <div class="verify-validation">
                     <b-icon icon="alert-circle-outline"></b-icon>
@@ -41,7 +58,9 @@
                       <b-icon icon="close"></b-icon>
                     </div>
                   </div>
-                  <div class="verify-content"></div>
+                  <div class="verify-content">
+                    <b-button @click="finishVerify">点击完成验证</b-button>
+                  </div>
                 </div>
               </div>
             </template>
@@ -126,31 +145,18 @@
       </div>
     </div>
     <div>
-      <client-only placeholder="Loading...">
-        <slide-verify
-          :l="42"
-          :r="10"
-          :w="310"
-          :h="155"
-          slider-text="向右滑动"
-          @success="onSuccess"
-          @fail="onFail"
-          @refresh="onRefresh"
-        ></slide-verify>
-      </client-only>
       <div>{{ msg }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import SlideVerify from 'vue-monoplasty-slide-verify'
 import SignNavbar from '../components/SignNavbar'
 export default {
   name: 'Signup',
   auth: false,
   layout: 'portal',
-  components: { SignNavbar, SlideVerify },
+  components: { SignNavbar },
   data() {
     return {
       isShow: false,
@@ -158,6 +164,8 @@ export default {
       phone: '',
       nextStep: false,
       msg: '',
+      isVerify: false,
+      telephoneError: false,
     }
   },
   methods: {
@@ -169,6 +177,16 @@ export default {
     },
     goNextStep(next) {
       next.action()
+    },
+    finishVerify() {
+      this.isVerify = true
+      this.isShow = false
+    },
+    finishInputPhone() {
+      // eslint-disable-next-line
+      if (!(/^1[3|4|5|7|8]\d{9}$/.test(this.phone))){
+        this.telephoneError = true
+      }
     },
     onSuccess() {
       this.msg = 'login success'
@@ -204,6 +222,14 @@ export default {
   margin-top: 20px;
   margin-left: 50px;
   width: 400px;
+}
+.input-code {
+  margin-top: 40px;
+  margin-left: 50px;
+  width: 400px;
+}
+.field-body {
+  margin-left: -150px;
 }
 .phone-validation-text {
   margin-top: -8px;
