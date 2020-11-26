@@ -35,9 +35,9 @@
                   <p class="control">
                     <span class="button is-static">手机验证码</span>
                   </p>
-                  <b-input v-model="phone" style="width: 100%"></b-input>
+                  <b-input v-model="verifyCode" style="width: 100%"></b-input>
                   <p class="control">
-                    <span class="button is-static">获取验证码</span>
+                    <b-button @click="getVerifyCode">获取验证码</b-button>
                   </p>
                 </b-field>
                 <div>
@@ -166,6 +166,7 @@ export default {
       msg: '',
       isVerify: false,
       telephoneError: false,
+      verifyCode: '',
     }
   },
   methods: {
@@ -176,7 +177,11 @@ export default {
       this.isShow = !this.isShow
     },
     goNextStep(next) {
-      next.action()
+      if (this.verifyCode === '') {
+        this.telephoneError = true
+      } else {
+        next.action()
+      }
     },
     finishVerify() {
       this.isVerify = true
@@ -187,6 +192,14 @@ export default {
       if (!(/^1[3|4|5|7|8]\d{9}$/.test(this.phone))){
         this.telephoneError = true
       }
+    },
+    async getVerifyCode() {
+      const res = await this.$axios.get('/message/code', {
+        params: {
+          phone: this.phone,
+        },
+      })
+      this.verifyCode = res.data.data.code
     },
     onSuccess() {
       this.msg = 'login success'
