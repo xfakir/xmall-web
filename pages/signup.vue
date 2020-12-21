@@ -5,119 +5,118 @@
       <div class="step-bar">
         <b-steps v-model="registerStep" size="is-small">
           <b-step-item step="1" label="验证手机号">
-            <template>
-              <div class="step1-box">
-                <b-field
-                  class="input-phone"
-                  :message="{ 'correct phone number': telephoneError }"
+            <div class="step1-box">
+              <b-field
+                class="input-phone"
+                :type="{ 'is-danger': telephoneError }"
+                :message="[
+                  // eslint-disable-next-line
+                  { '请输入正确的手机号': verifyError },
+                  {
+                    // eslint-disable-next-line
+                    '该手机号已被注册': registeredError,
+                  },
+                ]"
+              >
+                <b-input
+                  v-model="phone"
+                  placeholder="请输入手机号"
+                  @blur="finishInputPhone"
+                ></b-input>
+              </b-field>
+              <div v-if="!isVerify">
+                <b-button class="input-verify" @click="showVerify"
+                  >点击按钮进行验证</b-button
                 >
-                  <p class="control">
-                    <span class="button is-static">中国 0086</span>
-                  </p>
-                  <b-input
-                    v-model="phone"
-                    style="width: 100%"
-                    @blur="finishInputPhone"
-                  ></b-input>
-                </b-field>
-                <!-- <div>
-                  <div class="phone-validation">
-                    <b-icon icon="alert-circle-outline"></b-icon>
+              </div>
+              <b-field
+                v-else
+                class="input-code"
+                :type="{ 'is-danger': verifyCodeError }"
+                :message="[
+                  // eslint-disable-next-line
+                  { '请输入验证码': noneCodeError },
+                  {
+                    // eslint-disable-next-line
+                    '验证码错误': incorrectCodeError,
+                  },
+                ]"
+              >
+                <p class="control">
+                  <span class="button is-static">手机验证码</span>
+                </p>
+                <b-input v-model="verifyCode" style="width: 100%"></b-input>
+                <p class="control">
+                  <b-button @click="getVerifyCode">获取验证码</b-button>
+                </p>
+              </b-field>
+              <div v-if="isShow === true" class="verify-box">
+                <div class="verify-bar">
+                  <div class="verify-bar-title">完成拼图验证</div>
+                  <div class="verify-bar-refresh">
+                    <!--todo background-url-->
+                    <b-icon class="icon-refresh" icon="refresh"></b-icon>
+                    <span class="refresh-title">换一个</span>
                   </div>
-                  <div class="phone-validation-text">aaa</div>
-                </div>-->
-                <div v-if="!isVerify">
-                  <b-button class="input-verify" @click="showVerify"
-                    >点击按钮进行验证</b-button
-                  >
+                  <div class="verify-bar-close" @click="closeVerify">
+                    <b-icon icon="close"></b-icon>
+                  </div>
                 </div>
-                <b-field v-else class="input-code">
-                  <p class="control">
-                    <span class="button is-static">手机验证码</span>
-                  </p>
-                  <b-input v-model="verifyCode" style="width: 100%"></b-input>
-                  <p class="control">
-                    <b-button @click="getVerifyCode">获取验证码</b-button>
-                  </p>
-                </b-field>
-                <div>
-                  <div class="verify-validation">
-                    <b-icon icon="alert-circle-outline"></b-icon>
-                  </div>
-                  <div class="verify-validation-text">aaa</div>
-                </div>
-                <div v-if="isShow === true" class="verify-box">
-                  <div class="verify-bar">
-                    <div class="verify-bar-title">完成拼图验证</div>
-                    <div class="verify-bar-refresh">
-                      <!--todo background-url-->
-                      <b-icon class="icon-refresh" icon="refresh"></b-icon>
-                      <span class="refresh-title">换一个</span>
-                    </div>
-                    <div class="verify-bar-close" @click="closeVerify">
-                      <b-icon icon="close"></b-icon>
-                    </div>
-                  </div>
-                  <div class="verify-content">
-                    <b-button @click="finishVerify">点击完成验证</b-button>
-                  </div>
+                <div class="verify-content">
+                  <b-button @click="finishVerify">点击完成验证</b-button>
                 </div>
               </div>
-            </template>
+            </div>
           </b-step-item>
 
           <b-step-item step="2" label="填写账号信息">
-            <template>
-              <div class="step2-box">
-                <b-field class="step2-filed">
-                  <p class="control">
-                    <span class="button is-static">中国 0086</span>
-                  </p>
-                  <b-input class="step2-input" value="Kevin Garvey"></b-input>
-                </b-field>
-                <b-field class="step2-filed" type="is-warning">
-                  <p class="control">
-                    <span class="button is-static">中国 0086</span>
-                  </p>
-                  <b-input
-                    class="step2-input"
-                    value="123"
-                    type="password"
-                  ></b-input>
-                </b-field>
-                <b-field class="step2-filed" type="is-warning">
-                  <p class="control">
-                    <span class="button is-static">中国 0086</span>
-                  </p>
-                  <b-input
-                    class="step2-input"
-                    value="123"
-                    type="password"
-                  ></b-input>
-                </b-field>
-              </div>
-            </template>
+            <div class="step2-box">
+              <b-field class="step2-filed">
+                <p class="control">
+                  <span class="button is-static">中国 0086</span>
+                </p>
+                <b-input class="step2-input" value="Kevin Garvey"></b-input>
+              </b-field>
+              <b-field class="step2-filed" type="is-warning">
+                <p class="control">
+                  <span class="button is-static">中国 0086</span>
+                </p>
+                <b-input
+                  class="step2-input"
+                  value="123"
+                  type="password"
+                ></b-input>
+              </b-field>
+              <b-field class="step2-filed" type="is-warning">
+                <p class="control">
+                  <span class="button is-static">中国 0086</span>
+                </p>
+                <b-input
+                  class="step2-input"
+                  value="123"
+                  type="password"
+                ></b-input>
+              </b-field>
+            </div>
           </b-step-item>
 
           <b-step-item step="3" label="注册成功">
-            <template>
-              <div class="step3-box">
-                <div class="success-icon">
-                  <b-icon
-                    icon="checkbox-marked-circle"
-                    size="is-large"
-                    type="is-success"
-                  ></b-icon>
-                </div>
-                <div class="success-text">
-                  <p>恭喜您 xfakir</p>
-                  <p>您已成功注册用户，祝您购物愉快~</p>
-                </div>
-                <div class="success-button">
-                  <b-button type="is-danger">去购物</b-button>
-                </div>
+            <div class="step3-box">
+              <div class="success-icon">
+                <b-icon
+                  icon="checkbox-marked-circle"
+                  size="is-large"
+                  type="is-success"
+                ></b-icon>
               </div>
-            </template>
+              <div class="success-text">
+                <p>恭喜您 xfakir</p>
+                <p>您已成功注册用户，祝您购物愉快~</p>
+              </div>
+              <div class="success-button">
+                <b-button type="is-danger">去购物</b-button>
+              </div>
+            </div>
           </b-step-item>
           <template slot="navigation" slot-scope="{ next }">
             <b-button
@@ -136,7 +135,7 @@
               outlined
               type="is-success"
               :disabled="nextStep"
-              @click.prevent="next.action"
+              @click="goNextStep(next)"
             >
               立即注册
             </b-button>
@@ -165,22 +164,71 @@ export default {
       nextStep: false,
       msg: '',
       isVerify: false,
-      telephoneError: false,
+      verifyError: false,
+      registeredError: false,
       verifyCode: '',
+      noneCodeError: false,
+      incorrectCodeError: false,
     }
   },
+  computed: {
+    telephoneError() {
+      return this.verifyError || this.registeredError
+    },
+    verifyCodeError() {
+      return this.noneCodeError || this.incorrectCodeError
+    },
+  },
+  mounted() {
+    window.addEventListener('load', () => {
+      if (this.$route.path !== '/') {
+        this.$router.replace('/')
+      }
+    })
+  },
   methods: {
-    showVerify() {
-      this.isShow = !this.isShow
+    async showVerify() {
+      if (this.phone !== '' && !this.verifyError) {
+        const res = await this.$axios.get('/member/isPhoneRegistered', {
+          params: {
+            phone: this.phone,
+          },
+        })
+        if (res.data.code === 200) {
+          this.isShow = !this.isShow
+        } else {
+          this.registeredError = true
+        }
+      } else {
+        this.telephoneError = true
+        this.verifyError = true
+      }
     },
     closeVerify() {
       this.isShow = !this.isShow
     },
     goNextStep(next) {
-      if (this.verifyCode === '') {
-        this.telephoneError = true
-      } else {
+      if (
+        this.phone !== '' &&
+        !this.telephoneError &&
+        this.verifyCode !== '' &&
+        !this.verifyCodeError
+      ) {
         next.action()
+      } else if (this.phone === '') {
+        this.verifyError = true
+      } else if (
+        this.phone !== '' &&
+        !this.telephoneError &&
+        this.verifyCode === ''
+      ) {
+        if (this.isVerify === false) {
+          this.isShow = !this.isShow
+        } else {
+          this.noneCodeError = true
+        }
+      } else if (this.verifyCode === '') {
+        this.noneCodeError = true
       }
     },
     finishVerify() {
@@ -188,12 +236,20 @@ export default {
       this.isShow = false
     },
     finishInputPhone() {
-      // eslint-disable-next-line
-      if (!(/^1[3|4|5|7|8]\d{9}$/.test(this.phone))){
+      if (this.phone === '') {
+        this.verifyError = false
+        this.telephoneError = false
+      } else if (!/^1[3|4|5|7|8]\d{9}$/.test(this.phone)) {
+        this.verifyError = true
         this.telephoneError = true
+      } else if (/^1[3|4|5|7|8]\d{9}$/.test(this.phone)) {
+        this.verifyError = false
+        this.telephoneError = false
       }
     },
     async getVerifyCode() {
+      this.noneCodeError = false
+      this.incorrectCodeError = false
       const res = await this.$axios.get('/message/code', {
         params: {
           phone: this.phone,
@@ -247,6 +303,7 @@ export default {
 .phone-validation-text {
   margin-top: -8px;
   float: left;
+  color: #f14668;
 }
 .phone-validation {
   width: 25px;

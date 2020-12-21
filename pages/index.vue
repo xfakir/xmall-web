@@ -4,7 +4,9 @@
       <card v-if="this.$auth.loggedIn" title="Free" icon="github">
         {{ this.$auth.user.username }}
       </card>
-      <card v-else title="Free" icon="github"> 登录 </card>
+      <card v-else title="Free" icon="github">
+        <nuxt-link to="/signup">注册</nuxt-link>
+      </card>
       <card title="Free" icon="github">
         {{ str }}
       </card>
